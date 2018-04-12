@@ -7,7 +7,7 @@ import java.util.StringTokenizer;
 
 public class Main {
 
-	static int N, ret, K, highest, the[] = new int[2];
+	static int N, ret, K, highest;
 	static boolean flag;
 	static Queue<Point> q = new LinkedList<>();
 	static int[] map[], dx= {-1,0,1,0}, dy = {0,1,0,-1};
