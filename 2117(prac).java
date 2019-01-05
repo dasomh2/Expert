@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -6,7 +5,7 @@ import java.util.*;
 
 public class Solution {
 
-	static int N, M, ans, servedH;
+	static int N, M, servedH;
 	static int[] map[];
 
 	public static void main(String[] args) throws IOException {
@@ -21,7 +20,7 @@ public class Solution {
 			M = Integer.parseInt(st.nextToken());
 
 			map = new int[N][N];
-			ans = 1 - M;
+			servedH = 1;
 
 			for(int i=0; i<N; i++) {
 				st = new StringTokenizer(br.readLine());
@@ -34,8 +33,7 @@ public class Solution {
 					findArea(i, j);
 				}
 			}
-
-			System.out.println("#"+t+" "+ans);
+			System.out.println("#"+t+" "+servedH);
 		}
 	}
 	private static void findArea(int x, int y) {
@@ -43,50 +41,41 @@ public class Solution {
 		Queue<Point> q = new LinkedList<>();
 		boolean[] visit[] = new boolean[N][N];
 
-		for(int k=2; k<=N; k++) {//K 범위 
+		int cnt = 1, home = 0;
+		q.offer(new Point(x, y));
+		visit[x][y] = true;
+		if(map[x][y] == 1)
+			home++;
 
-			int cnt = 1, home = 0;
-			q.offer(new Point(x, y));
-			visit[x][y] = true;
+		for(int k=2; k<=N+1; k++) {//K 범위 
+			int qsize = q.size();
 
-			while(!q.isEmpty()) {
+			for(int a=0; a<qsize; a++) {
 
-				if(cnt == k) {
-					if(home > 0) {
-						int res = k*k + (k-1)*(k-1) - home;
-						if(ans < res) {
-							ans = res;
-							servedH = home;
-							break;
+				Point p = q.poll();
+
+				for(int i=0; i<4; i++) {
+					int nx = p.x + dx[i];
+					int ny = p.y + dy[i];
+
+					if(isRange(nx, ny) && !visit[nx][ny]) {
+						q.offer(new Point(nx, ny));
+						visit[nx][ny] = true;
+
+						if(map[nx][ny] == 1) {
+							home++;
 						}
-					}
-					else {
-						visit = new boolean[N][N];
-						q = new LinkedList<>();
-						break;
 					}
 				}
+			}
+			cnt++;
 
-				int qsize = q.size();
-
-				for(int a=0; a<qsize; a++) {
-
-					Point p = q.poll();
-
-					for(int i=0; i<4; i++) {
-						int nx = p.x + dx[i];
-						int ny = p.y + dy[i];
-
-						if(isRange(nx, ny) && !visit[nx][ny]) {
-							q.offer(new Point(nx, ny));
-							visit[nx][ny] = true;
-
-							if(map[nx][ny] == 1) {
-								home++;
-							}
-						}
+			if(cnt == k) {
+				if(home > 0) {
+					int res = (home * M) - (k*k + (k-1)*(k-1));
+					if(res >= 0) {
+						servedH = Math.max(servedH,home);
 					}
-					cnt++;
 				}
 			}
 		}
