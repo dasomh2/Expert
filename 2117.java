@@ -36,10 +36,10 @@ public class Solution {
 					q.add(new Point(i,j));
 
 					if(map[i][j] == 1) {//현재 점이 집이면
-						DFS(2, 1, q);
+						BFS(2, 1, q);
 					}
 					else {//현재 점이 집이 아니면
-						DFS(2, 0, q);
+						BFS(2, 0, q);
 					}
 					q.clear();//큐 초기화 
 				}
@@ -47,7 +47,7 @@ public class Solution {
 			System.out.println("#"+a+" "+MAX);
 		}
 	}
-	private static void DFS(int K, int cnt, Queue<Point> q) {
+	private static void BFS(int K, int cnt, Queue<Point> q) {
 		boolean[][] visit = new boolean[N][N];
 
 		while(!q.isEmpty()) {
